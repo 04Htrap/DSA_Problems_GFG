@@ -1,13 +1,14 @@
 /*
+Definition for Node
 class Node {
 public:
     int data;
     Node* left;
     Node* right;
 
-    Node(int x) {
-        data = x;
-        left = right = NULL;
+    Node(int val) {
+        data = val;
+        left = right = nullptr;
     }
 };
 */
@@ -17,44 +18,26 @@ class Solution {
     vector<int> bottomView(Node *root) {
         // code here
         vector<int> ans;
-        
         if(root == nullptr)
             return ans;
-            
-        //Create a map to store the bottom node for each vertical index
-        map<int, int> mpp; //Index as key and node as value;
         
-        //Make a queue for BFS with a pair having the node and vertical index
+        map<int, int> mp;
         queue<pair<Node*, int>> q;
         q.push({root, 0});
         
         while(!q.empty()) {
-            auto it = q.front();
+            auto curr = q.front();
             q.pop();
             
-            Node* node = it.first;
-            int idx = it.second;
+            Node* temp = curr.first;
+            int idx = curr.second;
             
-            mpp[idx] = node->data; //for the idx put the value of the corresponding node
-            
-            //If the left child exists then push it with vertical idx - 1
-            if(node->left != nullptr) {
-                q.push({node->left, idx - 1});
-            }
-            
-            //If the right child exists then push it with vertical idx + 1
-            if(node->right != nullptr) {
-                q.push({node->right, idx + 1});
-            }
-            
+            mp[idx] = temp -> data;
+            if(temp -> left) q.push({temp -> left, idx - 1});
+            if(temp -> right) q.push({temp -> right, idx + 1});
         }
-        
-        //Put values of mp in ans array
-        for(auto it : mpp) {
+        for(auto it : mp) 
             ans.push_back(it.second);
-        }
-        
         return ans;
-            
     }
 };
